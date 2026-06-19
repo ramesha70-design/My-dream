@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dream v4</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="My Dream">
+    
+    <style>
+        :root {
+            --bg-color: #0f0c1b;
+            --card-bg: #1a162b;
+            --primary: #8a2be2;
+            --primary-light: #a14dff;
+            --text-main: #f1ecf9;
+            --text-muted: #a69cb8;
+            --success: #2ec4b6;
+            --warning: #ffb703;
+            --danger: #e63946;
+            --border: #2d2643;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 80px; }
+        
+        header {
+            background: linear-gradient(135deg, #2a1b4e, #130924);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            position: relative;
+        }
+        header h1 { font-size: 24px; color: #fff; letter-spacing: 1px; }
+        header p { color: var(--text-muted); font-size: 13px; margin-top: 5px; }
+
+        /* Name Edit Elements */
+        .name-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+        .edit-icon {
+            cursor: pointer;
+            font-size: 14px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .edit-icon:hover { opacity: 1; }
+
+        .container { max-width: 600px; margin: 15px auto; padding: 0 12px; }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 15px;
+        }
+
+        h2 { font-size: 16px; margin-bottom: 12px; color: var(--primary-light); display: flex; align-items: center; gap: 8px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+        .metric-box {
+            background: rgba(255,255,255,0.02);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .metric-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+        .metric-value { font-size: 18px; font-weight: bold; color: #fff; margin-top: 4px; }
+
+        /* Forms & Inputs */
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+        input, textarea, select {
+            width: 100%; background-color: #120e20; border: 1px solid var(--border);
+            border-radius: 6px; padding: 10px; color: #fff; font-size: 14px;
+        }
+
+        .subject-block {
+            background: rgba(255,255,255,0.01); padding: 10px;
+            border-radius: 6px; margin-bottom: 10px; border-left: 3px solid var(--primary);
+        }
+        .subject-block h3 { font-size: 13px; margin-bottom: 8px; color: #fff; }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white; border: none; padding: 12px; border-radius: 6px;
+            cursor: pointer; width: 100%; font-weight: bold; font-size: 14px;
+        }
+
+        /* History Items */
+        .history-item {
+            background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px;
+            margin-bottom: 10px; border: 1px solid var(--border);
+        }
+        .history-date { font-weight: bold; color: var(--primary-light); font-size: 14px; margin-bottom: 6px; display: flex; justify-content: space-between;}
+        .history-details { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+        .del-btn { color: var(--danger); cursor: pointer; font-size: 12px; background: none; border: none; width: auto; padding: 0; }
+
+        /* Navigation Bar */
+        nav {
+            position: fixed; bottom: 0; left: 0; right: 0; background: #161129;
+            border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 12px 0;
+        }
+        .nav-item { color: var(--text-muted); text-decoration: none; font-size: 11px; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .nav-item.active { color: var(--primary-light); font-weight: bold; }
+        .nav-icon { font-size: 18px; margin-bottom: 2px; }
+        .page { display: none; } .page.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="name-container">
+            <h1 id="user-display">💜 FUTURE DOCTOR</h1>
+            <span class="edit-icon" onclick="changeName()">✏️</span>
+        </div>
+        <p>AIIMS Bound • NEET 2028 Tracker</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- ================= DASHBOARD ================= -->
+        <div id="page-dashboard" class="page active">
+            <div class="grid-2">
+                <div class="metric-box"><div class="metric-title">🎯 Target</div><div class="metric-value">680+</div></div>
+                <div class="metric-box"><div class="metric-title">🩺 College</div><div class="metric-value" style="color:var(--primary-light)">AIIMS</div></div>
+            </div>
+            <div class="grid-2">
+                <div class="metric-box"><div class="metric-title">⏳ Countdown</div><div id="countdown-val" class="metric-value" style="font-size:14px;">---</div></div>
+                <div class="metric-box"><div class="metric-title">🔥 Logged Days</div><div id="streak-val" class="metric-value">0 Days</div></div>
+            </div>
+
+            <div class="card">
+                <h2>📈 Recent Logs History</h2>
+                <div id="history-container">
+                    <!-- Dynamic entries land here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= LOG JOURNAL ================= -->
+        <div id="page-journal" class="page">
+            <div class="card">
+                <h2>📝 Log Daily Study Grind</h2>
+                
+                <div class="form-group">
+                    <label>Select Date</label>
+                    <input type="date" id="log-date">
+                </div>
+
+                <div class="subject-block">
+                    <h3>⚛️ Physics</h3>
+                    <input type="text" id="p-topics" placeholder="Topics studied" style="margin-bottom:6px;">
+                    <input type="number" id="p-qs" placeholder="Questions solved">
+                </div>
+
+                <div class="subject-block">
+                    <h3>🧪 Chemistry</h3>
+                    <input type="text" id="c-topics" placeholder="Topics studied" style="margin-bottom:6px;">
+                    <input type="number" id="c-qs" placeholder="Questions solved">
+                </div>
+
+                <div class="subject-block">
+                    <h3>🧬 Biology</h3>
+                    <input type="text" id="b-topics" placeholder="Topics studied" style="margin-bottom:6px;">
+                    <input type="number" id="b-qs" placeholder="Questions solved">
+                </div>
+
+                <div class="form-group">
+                    <label>⏱️ Study Hours This Day</label>
+                    <input type="number" step="0.5" id="study-hours" placeholder="Total hours">
+                </div>
+
+                <button onclick="saveNewEntry()">💾 Lock Day into Memory</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom App Navigation -->
+    <nav>
+        <div class="nav-item active" onclick="switchPage('dashboard', this)">
+            <span class="nav-icon">🏠</span><span>Dashboard</span>
+        </div>
+        <div class="nav-item" onclick="switchPage('journal', this)">
+            <span class="nav-icon">📝</span><span>Log Entry</span>
+        </div>
+    </nav>
+
+    <script>
+        // Set today's date picker input automatically
+        document.getElementById('log-date').valueAsDate = new Date();
+
+        function switchPage(pageId, element) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            element.classList.add('active');
+            if(pageId === 'dashboard') loadHistory();
+        }
+
+        function updateCountdown() {
+            const examDate = new Date("May 7, 2028").getTime();
+            const gap = examDate - new Date().getTime();
+            const days = Math.floor(gap / (1000 * 60 * 60 * 24));
+            document.getElementById("countdown-val").innerText = gap > 0 ? `${days} Days Left` : "Exam Year!";
+        }
+
+        // Custom Profile Name Script
+        function changeName() {
+            const currentName = document.getElementById('user-display').innerText.replace('💜 ', '');
+            const newName = prompt("Enter your name / title:", currentName);
+            if (newName && newName.trim() !== "") {
+                const formattedName = `💜 ${newName.trim().toUpperCase()}`;
+                document.getElementById('user-display').innerText = formattedName;
+                localStorage.setItem('neet_user_name', formattedName);
+            }
+        }
+
+        function getLogs() {
+            return JSON.parse(localStorage.getItem('neet_history_logs')) || [];
+        }
+
+        function saveNewEntry() {
+            const dateStr = document.getElementById('log-date').value;
+            if(!dateStr) return alert("Please select a valid calendar date.");
+
+            const newLog = {
+                date: dateStr,
+                physics: { topics: document.getElementById('p-topics').value || 'None', qs: document.getElementById('p-qs').value || 0 },
+                chemistry: { topics: document.getElementById('c-topics').value || 'None', qs: document.getElementById('c-qs').value || 0 },
+                biology: { topics: document.getElementById('b-topics').value || 'None', qs: document.getElementById('b-qs').value || 0 },
+                hours: document.getElementById('study-hours').value || 0
+            };
+
+            let currentLogs = getLogs();
+            currentLogs = currentLogs.filter(item => item.date !== dateStr);
+            currentLogs.unshift(newLog); 
+            
+            currentLogs.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            localStorage.setItem('neet_history_logs', JSON.stringify(currentLogs));
+            alert(`Logged successfully for ${dateStr}!`);
+            
+            document.getElementById('p-topics').value = ''; document.getElementById('p-qs').value = '';
+            document.getElementById('c-topics').value = ''; document.getElementById('c-qs').value = '';
+            document.getElementById('b-topics').value = ''; document.getElementById('b-qs').value = '';
+            document.getElementById('study-hours').value = '';
+
+            switchPage('dashboard', document.querySelectorAll('.nav-item')[0]);
+        }
+
+        function deleteEntry(dateToDelete) {
+            if(confirm("Delete this log entry permanently?")) {
+                let logs = getLogs().filter(item => item.date !== dateToDelete);
+                localStorage.setItem('neet_history_logs', JSON.stringify(logs));
+                loadHistory();
+            }
+        }
+
+        function loadHistory() {
+            const logs = getLogs();
+            document.getElementById('streak-val').innerText = `${logs.length} Days`;
+            const container = document.getElementById('history-container');
+            
+            if(logs.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted); font-size:13px; text-align:center; padding: 20px 0;">No history logged yet. Head over to 'Log Entry' to start your timeline!</p>`;
+                return;
+            }
+
+            container.innerHTML = logs.map(item => `
+                <div class="history-item">
+                    <div class="history-date">
+                        <span>📅 ${item.date}</span>
+                        <button class="del-btn" onclick="deleteEntry('${item.date}')">❌ Remove</button>
+                    </div>
+                    <div class="history-details">
+                        <strong>⏱️ Hours Studied:</strong> ${item.hours} hrs <br>
+                        🧬 <strong>Bio:</strong> ${item.biology.topics} (${item.biology.qs} Qs)<br>
+                        🧪 <strong>Chem:</strong> ${item.chemistry.topics} (${item.chemistry.qs} Qs)<br>
+                        ⚛️ <strong>Phy:</strong> ${item.physics.topics} (${item.physics.qs} Qs)
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.onload = function() {
+            updateCountdown();
+            loadHistory();
+            
+            // Load saved user name profile field
+            const savedName = localStorage.getItem('neet_user_name');
+            if (savedName) {
+                document.getElementById('user-display').innerText = savedName;
+            }
+        }
+    </script>
+</body>
+</html>
+
+```
